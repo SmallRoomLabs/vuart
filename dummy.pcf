@@ -1,11 +1,11 @@
 #
 # Basic pins on the olimex board
 #
-set_io --warn-no-port EXTCLK   15
-set_io --warn-no-port P0 41    #BUT1  41
-set_io --warn-no-port P1 42    #BUT2  42
-set_io --warn-no-port P2 40    #LED1  40
-set_io --warn-no-port P3 51    #LED2  51
+set_io --warn-no-port EXTCLK 15
+set_io --warn-no-port BUT1  41
+set_io --warn-no-port BUT2  42
+set_io --warn-no-port LED1  40
+set_io --warn-no-port LED2  51
 
 #
 # Pins for SRAM on the olimex board

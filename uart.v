@@ -32,10 +32,10 @@ parameter XTAL              = 100_000_000;
 // parameter BAUD           = 921600;     // 66
 // parameter BAUD           = 460800;     // 68
 // parameter BAUD           = 230400;     // 69
-parameter BAUD           = 115200;     // 70
+// parameter BAUD           = 115200;     // 70
 // parameter BAUD           = 76800;      // 72
 // parameter BAUD           = 19200;      // 74
-// parameter BAUD           = 9600;       // 76
+parameter BAUD           = 9600;       // 76
 // parameter BAUD           = 4800;       // 77
 // parameter BAUD           = 2400;       // 78
 // parameter BAUD           = 1200;       // 80
@@ -138,18 +138,21 @@ reg [3:0] txCnt=0;    // Counter for the bits of the byte while transmitting
 reg txTriggered=0;    // Set high at txStb and low when the transmission starts
                       // at the next baudTick
 always @(posedge SYSCLK) begin
+
+  // If upstream wants to send something, store the data and set the triggered 
+  // flag to start waiting for the next baudTick
   if (txStb) begin
-    // At TX strobe store the new data and set the triggered flag to start
-    // waiting for the next baudTick
     txBuf <= {1'b0, ~txData, 1'b1};
     txTriggered <= 1;
+
+  // Check if it's time to start sending the pending data
   end else if (txTriggered & baudTick) begin
-    // It's time to start sending the pending data
     txTriggered <= 0;
     txCnt <= 9;
-  end else if (txCnt!=0 & baudTick) begin
-    // As long as not all bits are sent - output the next bit
-    txBuf <= txBuf / 2;
+
+  // As long as not all bits are sent - output the next bit
+  end else if (txCnt>0 & baudTick) begin
+    txBuf <= txBuf >> 1;
     txCnt <= txCnt - 1;
   end
 end

@@ -14,14 +14,7 @@ jobs:
         docker pull verilator/verilator
         FILE=uart
         FILES=$(ls *.v | sed s/${FILE}\.\v//)
-        echo FILE=$FILE FILES=$FILES
-        echo "PWD IS"
-        pwd
-        echo "FIND ."
-        find .
-        echo "DoCKER IMAGES"
         docker images
-        echo "DoCKER RUN"
         docker run --rm \
           --log-driver=none -a stdout -a stderr \
           -w/work -v${PWD}/:/work \

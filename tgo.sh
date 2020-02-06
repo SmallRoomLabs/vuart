@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILE=uart
+FILE=top
 FILES=$(ls *.v | sed s/${FILE}\.\v//)
 DR="docker run --rm --log-driver=none -a stdout -a stderr -w/work -v${PWD}/:/work"
 PCF=dummy.pcf
@@ -38,23 +38,22 @@ echo --PACKING
 $DR cranphin/icestorm icepack $FILE.asc $FILE.bin
 if [ $? != 0 ]; then echo "ERROR"; exit 1; fi
 
-echo --GRAPHING
-$DR cranphin/icestorm yosys -q -p "prep -top $FILE; write_json $FILE.json" $FILE.v
-if [ $? != 0 ]; then echo "ERROR"; exit 1; fi
-jsonToPng $FILE &
+# echo --GRAPHING
+# $DR cranphin/icestorm yosys -q -p "prep -top $FILE; write_json $FILE.json" $FILE.v
+# if [ $? != 0 ]; then echo "ERROR"; exit 1; fi
+# jsonToPng $FILE &
 
 if [ "$1" == "up" ]; then
-    ../../upload/iceflash /dev/cu.usbmodem48065801 -h -e -w $FILE.bin -g
-	stty -a
+    ../../upload/iceflash /dev/cu.usbmodem48065801 -s -h -e -w $FILE.bin -t -1 -G
     tio /dev/cu.usbmodem48065801 
     exit 0;
 fi
 
 
-echo --TESTING
-$DR cranphin/iverilog iverilog -g2012 -o $FILE.vvp $FILE.vt $FILE.v $FILES 
-if [ $? != 0 ]; then echo "ERROR"; exit 1; fi
-$DR cranphin/iverilog vvp $FILE.vvp 
-if [ $? != 0 ]; then echo "ERROR"; exit 1; fi
+# echo --TESTING
+# $DR cranphin/iverilog iverilog -g2012 -o $FILE.vvp $FILE.vt $FILE.v $FILES 
+# if [ $? != 0 ]; then echo "ERROR"; exit 1; fi
+# $DR cranphin/iverilog vvp $FILE.vvp 
+# if [ $? != 0 ]; then echo "ERROR"; exit 1; fi
 
 echo --Done
