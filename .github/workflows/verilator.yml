@@ -14,6 +14,5 @@ jobs:
         docker pull verilator/verilator
         FILE=uart
         FILES=$(ls *.v | sed s/${FILE}\.\v//)
-        alias DR="docker run --rm --log-driver=none -a stdout -a stderr -w/work -v${PWD}/:/work"
-        DR verilator/verilator -Wall -Wno-UNUSED --top-module $FILE --lint-only $FILE.v $FILES
-        
+        echo FILE=$FILE FILES=$FILES
+        docker run --rm --log-driver=none -a stdout -a stderr -w/work -v${PWD}/:/work verilator/verilator -Wall -Wno-UNUSED --top-module $FILE --lint-only $FILE.v $FILES
