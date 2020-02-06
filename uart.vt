@@ -1,0 +1,111 @@
+`timescale 100ns/10ns
+
+module uart_tb();
+    reg SYSCLK=0;
+    reg RESET=0;
+    reg [7:0] txData=0;
+    reg txStb=0;
+    wire tx;
+    wire txRdy;
+//    reg rx=1;
+    wire rxRdy;
+    reg rxAck=0;
+
+    uart dut(
+        .SYSCLK(SYSCLK),
+        .RESET(RESET),
+        .txData(txData),
+        .txStb(txStb),
+        .tx(tx),
+        .txRdy(txRdy),
+        .rx(rx),
+        .rxRdy(rxRdy),
+        .rxAck(rxAck)
+    );
+    
+    initial begin 
+        RESET<=1; #5 RESET<=0; 
+        $dumpfile("uart.vcd");
+        $dumpvars(0,uart_tb);
+        #100000 $finish;
+    end  
+
+    always begin
+        #1 SYSCLK<=~SYSCLK;
+    end
+
+    always @(posedge SYSCLK) begin
+      if (rxRdy & ~rxAck) begin
+        $display("Received %02x",dut.rxData);
+        rxAck<=1;
+      end
+      if (rxAck) rxAck<=0;
+    end
+
+    // always begin
+    //   #1000; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=1; #16 rx<=0; #16 rx<=1; #16 rx<=0; #16 rx<=1; #16 rx<=0; #16 rx<=1; #16 rx<=0;
+    //   #16 rx<=1; // Stop
+
+    //   #300; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0;
+    //   #16 rx<=1; // Stop
+
+
+    //   #300; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=1; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0;
+    //   #16 rx<=1; // Stop
+
+    //   #300; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=1; #16 rx<=1; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0;
+    //   #16 rx<=1; // Stop
+
+    //   #300; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0;
+    //   #16 rx<=1; // Stop
+
+    //   #300; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=0; #16 rx<=0; #16 rx<=0; #16 rx<=0;
+    //   #16 rx<=1; // Stop
+
+    //   #300; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=0; #16 rx<=0; #16 rx<=0;
+    //   #16 rx<=1; // Stop
+
+    //   #300; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=0; #16 rx<=0;
+    //   #16 rx<=1; // Stop
+
+    //   #300; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=0;
+    //   #16 rx<=1; // Stop
+
+    //   #300; // Idle
+    //   #16 rx<=0;  // Start 
+    //   #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1; #16 rx<=1;
+    //   #16 rx<=1; // Stop
+
+    //   #200000; // Idle
+    // end
+
+    assign rx=tx;
+
+    reg [7:0]v=8'h55;
+    always begin
+        #20000; 
+        txData<=v; txStb<=1; #2; txStb<=0;
+        v<=v+1;
+    end
+    
+
+endmodule
+

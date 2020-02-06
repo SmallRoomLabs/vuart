@@ -1,0 +1,21 @@
+# MacOS specific files
+.DS_Store
+
+# History files
+.*_history
+
+# Editor backup files 
+*~
+*.tmp
+
+# verilog
+/verilog/*.tmp
+/verilog/*.blif
+/verilog/*.asc
+/verilog/*.bin
+/verilog/*.rpt
+/verilog/*.dot
+/verilog/*.png
+/verilog/*.json
+/verilog/*.vvp
+/verilog/*.vcd
