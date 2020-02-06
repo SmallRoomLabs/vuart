@@ -19,5 +19,7 @@ jobs:
         pwd
         echo "FIND ."
         find .
-        echo "DOCKER RUN"
-        docker run --rm --log-driver=none -a stdout -a stderr -w/work -v${PWD}/:/work verilator/verilator -Wall -Wno-UNUSED --top-module $FILE --lint-only $FILE.v $FILES
+        echo "DoCKER IMAGES"
+        docker images
+        echo "DoCKER RUN"
+        docker run --rm --log-driver=none -a stdout -a stderr -w/work -v${PWD}/:/work verilator/verilator -Wall -Wno-UNUSED --top-module --lint-only $FILE $FILE.v $FILES
