@@ -12,9 +12,8 @@ jobs:
     - name: Run a multi-line script
       run: |
         docker pull verilator/verilator
-        FILE=uart
+        FILE=top
         FILES=$(ls *.v | sed s/${FILE}\.\v//)
-        docker images
         docker run --rm \
           --log-driver=none -a stdout -a stderr \
           -w/work -v${PWD}/:/work \
