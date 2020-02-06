@@ -25,4 +25,6 @@ jobs:
         docker run --rm \
           --log-driver=none -a stdout -a stderr \
           -w/work -v${PWD}/:/work \
-          verilator/verilator -Wall -Wno-UNUSED --lint-only --top-module $FILE $FILE.v $FILES
+          --entrypoint /usr/local/bin/verilator \
+          verilator/verilator \
+          -Wall -Wno-UNUSED --lint-only --top-module $FILE $FILE.v $FILES
